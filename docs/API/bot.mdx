@@ -78,17 +78,21 @@ Finds a single bot
 
 [`Bot`](/docs/API/bot/#example-structure) **or** 404
 
-## Last 1000 Votes
+## Get Latest Voters
 
 <HTTPHeader type="GET" path="bots/:bot_id/votes" />
 
-Gets the last 1000 voters for your bot.
+Gets the latest unique voters for your bot.
 
-> If your bot receives more than 1000 votes monthly you cannot use this endpoints and must use `webhooks` and implement your own caching instead.
+> It's recommended to use webhooks and implement your own caching instead of manually checking a user every time, which could easily hit ratelimits.
 
-> This endpoint only returns unique votes, it does not include double votes (weekend votes).
+Developers are only restricted to receive their own bots' voters. Replace the ID with your own bot's ID.
 
-This example uses Luca but users are restricted to only receiving their own bots' votes. Replace the id with your own bot.
+### Query String Parameters
+
+| Field  | Type     | Description                                                    | Default    |
+| ------ | -------- | -------------------------------------------------------------- | ---------- |
+| page   | `number` | The page number. Each page can only have at most 100 voters.   | 1          |
 
 ### Example Response
 
