@@ -143,41 +143,42 @@ Checking whether or not a user has voted for your bot. Safe to use even if you h
 
 ### Post Body
 
-| Field        | Type                   | Description                                                                                       | Required |
-| ------------ | ---------------------- | ------------------------------------------------------------------------------------------------- | -------- |
-| server_count | `number` \| `number[]` | Amount of servers the bot is in. If an Array, it acts like shards                                 | ✔️       |
-| shards       | `number[]`             | Amount of servers the bot is in per shard.                                                        | ❌       |
-| shard_id     | `number`               | The zero-indexed id of the shard posting. Makes server_count set the shard specific server count. | ❌       |
-| shard_count  | `number`               | The amount of shards the bot has.                                                                 | ❌       |
+| Field                     | Type                   | Description                                                                                       | Required |
+| ------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------- | -------- |
+| server_count              | `number` \| `number[]` | Amount of servers the bot is in. If an Array, it acts like shards                                 | ✔️       |
+| shards <deprecated/>      | `number[]`             | Amount of servers the bot is in per shard.                                                        | ❌       |
+| shard_id <deprecated/>    | `number`               | The zero-indexed id of the shard posting. Makes server_count set the shard specific server count. | ❌       |
+| shard_count <deprecated/> | `number`               | The amount of shards the bot has.                                                                 | ❌       |
 
 ## Bot Structure
 
-| Field            | Type          | Description                                                                   |
-| ---------------- | ------------- | ----------------------------------------------------------------------------- |
-| id               | `string`      | The id of the bot                                                             |
-| username         | `string`      | The username of the bot                                                       |
-| discriminator    | `string`      | The discriminator of the bot                                                  |
-| avatar?          | `string`      | The avatar hash of the bot's avatar                                           |
-| defAvatar?       | `string`      | The cdn hash of the bot's avatar if the bot has none                          |
-| lib <deprecated/>| `string`      | The library of the bot                                                        | 
-| prefix           | `string`      | The prefix of the bot                                                         |
-| shortdesc        | `string`      | The short description of the bot                                              |
-| longdesc?        | `string`      | The long description of the bot. Can contain HTML and/or Markdown             |
-| tags             | `string[]`    | The tags of the bot                                                           |
-| website?         | `string`      | The website url of the bot                                                    |
-| support?         | `string`      | The support server invite code of the bot                                     |
-| github?          | `string`      | The link to the github repo of the bot                                        |
-| owners           | `snowflake[]` | of Snowflakes The owners of the bot. First one in the array is the main owner |
-| guilds           | `snowflake[]` | of Snowflakes The guilds featured on the bot page                             |
-| invite?          | `string`      | The custom bot invite url of the bot                                          |
-| date             | `datestring`  | The date when the bot was approved                                            |
-| server_count?    | `number`      | The amount of servers the bot has according to posted stats.                  |
-| shard_count?     | `number`      | The amount of shards the bot has according to posted stats.                   |
-| certifiedBot     | `boolean`     | The certified status of the bot                                               |
-| vanity?          | `string`      | The vanity url of the bot                                                     |
-| points           | `number`      | The amount of upvotes the bot has                                             |
-| monthlyPoints    | `number`      | The amount of upvotes the bot has this month                                  |
-| donatebotguildid | `string`      | The guild id for the donatebot setup                                          |
+| Field                          | Type          | Description                                                                   |
+| ------------------------------ | ------------- | ----------------------------------------------------------------------------- |
+| id                             | `string`      | The Top.gg id of the bot                                                      |
+| clientid                       | `string`      | The Discord id of the bot                                                     |
+| username                       | `string`      | The username of the bot                                                       |
+| discriminator <deprecated/>    | `string`      | The discriminator of the bot                                                  |
+| avatar                         | `string`      | The avatar url of the bot                                                     |
+| defAvatar? <deprecated/>       | `string`      | The cdn hash of the bot's avatar if the bot has none                          |
+| lib <deprecated/>              | `string`      | The library of the bot                                                        | 
+| prefix                         | `string`      | The prefix of the bot                                                         |
+| shortdesc                      | `string`      | The short description of the bot                                              |
+| longdesc?                      | `string`      | The long description of the bot. Can contain HTML and/or Markdown             |
+| tags                           | `string[]`    | The tags of the bot                                                           |
+| website?                       | `string`      | The website url of the bot                                                    |
+| support?                       | `string`      | The support url of the bot                                                    |
+| github?                        | `string`      | The link to the github repo of the bot                                        |
+| owners                         | `snowflake[]` | of Snowflakes The owners of the bot. First one in the array is the main owner |
+| guilds <deprecated/>           | `snowflake[]` | of Snowflakes The guilds featured on the bot page                             |
+| invite?                        | `string`      | The custom bot invite url of the bot                                          |
+| date                           | `datestring`  | The date when the bot was submitted                                           |
+| server_count?                  | `number`      | The amount of servers the bot has according to posted stats.                  |
+| shard_count? <deprecated/>     | `number`      | The amount of shards the bot has according to posted stats.                   |
+| certifiedBot <deprecated/>     | `boolean`     | The certified status of the bot                                               |
+| vanity?                        | `string`      | The vanity url of the bot                                                     |
+| points                         | `number`      | The amount of upvotes the bot has                                             |
+| monthlyPoints                  | `number`      | The amount of upvotes the bot has this month                                  |
+| donatebotguildid <deprecated/> | `string`      | The guild id for the donatebot setup                                          |
 
 ### Example Structure
 
