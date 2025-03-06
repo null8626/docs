@@ -32,33 +32,36 @@ Gets a list of bots that match a specific query.
 | count   | `number`                  | The length of the results array               |
 | total   | `number`                  | The total number of bots matching your search |
 
-```json:title=/bots?search%3DLuca
+```json:title=/bots?search=username%3A%20Mudae
 {
   "results": [
     {
-      "defAvatar": "6debd47ed13483642cf09e832ed0bc1b",
-      "invite": "",
-      "website": "https://discordbots.org",
-      "support": "KYZsaFb",
-      "github": "https://github.com/DiscordBotList/Luca",
-      "longdesc": "Luca only works in the **Discord Bot List** server.    \r\nPrepend commands with the prefix `-` or `@Luca#1375`.    \r\n**Please refrain from using these commands in non testing channels.**\r\n- `botinfo @bot` Shows bot info, title redirects to site listing.\r\n- `bots @user`* Shows all bots of that user, includes bots in the queue.\r\n- `owner / -owners @bot`* Shows all owners of that bot.\r\n- `prefix @bot`* Shows the prefix of that bot.\r\n* Mobile friendly version exists. Just add `noembed` to the end of the command.\r\n",
-      "shortdesc": "Luca is a bot for managing and informing members of the server",
-      "prefix": "- or @Luca#1375",
-      "clientid": "264811613708746752",
-      "avatar": "7edcc4c6fbb0b23762455ca139f0e1c9",
-      "id": "264811613708746752",
-      "discriminator": "1375",
-      "username": "Luca",
-      "date": "2017-04-26T18:08:17.125Z",
-      "server_count": 2,
-      "guilds": ["417723229721853963", "264445053596991498"],
-      "shards": [],
-      "monthlyPoints": 19,
-      "points": 397,
-      "certifiedBot": false,
-      "owners": ["129908908096487424"],
-      "tags": ["Moderation", "Role Management", "Logging"],
-      "donatebotguildid": ""
+      "invite": "https://discord.com/api/oauth2/authorize?client_id=432610292342587392&permissions=537159744&scope=applications.commands%20bot",
+      "website": "https://www.patreon.com/mudae",
+      "support": "https://discord.gg/EEGkGSh",
+      "longdesc": "<p>\n  Database of 115,000 waifu and husbando. Make and customize your own collection bound to the Discord server you are playing on: compete with your friends to get the best unique collection!<br>\n  All characters are from existing animes, manga, comics or video games.<br>\n  They were suggested by the community along with over 800,000 images and gifs: details are constantly added and reviewed by users.\n  Hundreds of commands are available, from original multiplayer word-based games to fun commands such as random anime quotes.\n</p>\n\n<p>\n  <br>\n  Fully translated in French<br>\n  Partially translated in Spanish and Brazilian Portuguese.<br>\n  Follow on Twitter: @Mudaebot\n  Join the main server: https://discord.gg/EEGkGSh\n</p>",
+      "shortdesc": "Database of 110,000 anime/game characters: make and customize the best collection in your server. 400 commands, multiplayer games and more!",
+      "prefix": "$",
+      "clientid": "432610292342587392",
+      "avatar": "https://cdn.discordapp.com/avatars/432610292342587392/29cb28fbf65a3958105026ab03abd306.png",
+      "id": "432610292342587392",
+      "username": "Mudae",
+      "date": "2018-04-20T12:27:16.000Z",
+      "server_count": 3371839,
+      "monthlyPoints": 507677,
+      "points": 215158421,
+      "owners": [
+        "275748765166469120"
+      ],
+      "tags": [
+        "anime",
+        "fun",
+        "game"
+      ],
+      "reviews": {
+        "averageScore": 4.5344863297431655,
+        "count": 9656
+      }
     }
   ],
   "limit": 1,
@@ -101,7 +104,7 @@ Developers are only restricted to receive their own bots' voters. Replace the ID
   {
     "username": "Xetera",
     "id": "140862798832861184",
-    "avatar": "a_1241439d430def25c100dd28add2d42f"
+    "avatar": "https://cdn.discordapp.com/avatars/1026525568344264724/cd70e62e41f691f1c05c8455d8c31e23.png"
   }
 ]
 ```
@@ -134,7 +137,7 @@ Checking whether or not a user has voted for your bot. Safe to use even if you h
 
 ### Example Response
 
-```json:title=/bots/9876/check?userId%3D1234
+```json:title=/bots/9876/check?userId=1234
 {
   "voted": 1
 }
@@ -171,8 +174,8 @@ Checking whether or not a user has voted for your bot. Safe to use even if you h
 | website?                       | `string`      | The website url of the bot                                                    |
 | support?                       | `string`      | The support url of the bot                                                    |
 | github?                        | `string`      | The link to the github repo of the bot                                        |
-| owners                         | `snowflake[]` | of Snowflakes The owners of the bot. First one in the array is the main owner |
-| guilds <deprecated/>           | `snowflake[]` | of Snowflakes The guilds featured on the bot page                             |
+| owners                         | `snowflake[]` | The owners of the bot. First one in the array is the main owner               |
+| guilds <deprecated/>           | `snowflake[]` | The guilds featured on the bot page                                           |
 | invite?                        | `string`      | The custom invite url of the bot                                              |
 | date                           | `datestring`  | The date when the bot was submitted                                           |
 | server_count?                  | `number`      | The amount of servers the bot has according to posted stats.                  |
