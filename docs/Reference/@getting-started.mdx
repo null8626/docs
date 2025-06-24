@@ -1,0 +1,35 @@
+---
+title: Getting started
+description: Top.gg API basics
+---
+
+import ReactPlayer from 'react-player';
+
+## Base URL
+
+For starters, every API request must start with the following base URL:
+
+```
+https://top.gg/api/
+```
+
+## Authentication
+
+To access our API, you need to authorize yourself by using an API token, which can be obtained this way:
+
+<ReactPlayer playing controls url='https://github.com/top-gg/rust-sdk/assets/60427892/d2df5bd3-bc48-464c-b878-a04121727bff' />
+
+<br/>
+This API token can later be used in your request's `Authorization` header. No token prefixes are needed. For example:
+
+```js
+const response = await fetch('https://top.gg/api/bots/stats', {
+  method: 'POST',
+  body: JSON.stringify({ server_count: 1 }),
+  headers: {
+    Authorization: 'TOPGG_TOKEN'
+  }
+})
+
+console.log(response.status)
+```
