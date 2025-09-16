@@ -1,6 +1,7 @@
 ---
 title: Rust
 description: Top.gg Rust library
+toc_max_heading_level: 4
 ---
 
 import Tabs from '@theme/Tabs';
@@ -23,46 +24,24 @@ topgg = "2"
 
 ## Setting up
 
-```rust
-let client = topgg::Client::new(env!("TOPGG_TOKEN").to_string());
-```
+<Tabs>
+  <TabItem value="v1" label="v1" default>
+    ```rust
+    let client = topgg::V1Client::new(env!("TOPGG_TOKEN").to_string());
+    ```
+  </TabItem>
+  <TabItem value="v0" label="v0">
+    ```rust
+    let client = topgg::Client::new(env!("TOPGG_TOKEN").to_string());
+    ```
+  </TabItem>
+</Tabs>
 
 ## Usage
 
-### Getting a bot
+### API v1
 
-```rust
-let bot = client.get_bot(264811613708746752).await.unwrap();
-```
-
-### Getting several bots
-
-```rust
-let bots = client
-  .get_bots()
-  .limit(250)
-  .skip(50)
-  .sort_by_monthly_votes()
-  .await
-  .unwrap();
-
-for bot in bots {
-  println!("{}", bot.name);
-}
-```
-
-### Getting your project's voters
-
-```rust
-//                             Page number
-let voters = client.get_voters(1).await.unwrap();
-
-for voter in voters {
-  println!("{}", voter.username);
-}
-```
-
-### Getting your project's vote information of a user
+#### Getting your project's vote information of a user
 
 <Tabs>
   <TabItem value="discord" label="Discord ID" default>
@@ -81,19 +60,7 @@ for voter in voters {
   </TabItem>
 </Tabs>
 
-### Getting your bot's server count
-
-```rust
-let server_count = client.get_bot_server_count().await.unwrap();
-```
-
-### Posting your bot's server count
-
-```rust
-client.post_bot_server_count(bot.server_count()).await.unwrap();
-```
-
-### Posting your bot's application commands list
+#### Posting your bot's application commands list
 
 <Tabs>
   <TabItem value="serenity" label="Serenity" default>
@@ -118,7 +85,60 @@ client.post_bot_server_count(bot.server_count()).await.unwrap();
   </TabItem>
 </Tabs>
 
-### Automatically posting your bot's server count every few minutes
+### API v0
+
+#### Getting a bot
+
+```rust
+let bot = client.get_bot(264811613708746752).await.unwrap();
+```
+
+#### Getting several bots
+
+```rust
+let bots = client
+  .get_bots()
+  .limit(250)
+  .skip(50)
+  .sort_by_monthly_votes()
+  .await
+  .unwrap();
+
+for bot in bots {
+  println!("{}", bot.name);
+}
+```
+
+#### Getting your project's voters
+
+```rust
+//                             Page number
+let voters = client.get_voters(1).await.unwrap();
+
+for voter in voters {
+  println!("{}", voter.username);
+}
+```
+
+#### Check if a user has voted for your project
+
+```rust
+let has_voted = client.has_voted(661200758510977084).await.unwrap();
+```
+
+#### Getting your bot's server count
+
+```rust
+let server_count = client.get_bot_server_count().await.unwrap();
+```
+
+#### Posting your bot's server count
+
+```rust
+client.post_bot_server_count(bot.server_count()).await.unwrap();
+```
+
+#### Automatically posting your bot's server count every few minutes
 
 <Tabs>
   <TabItem value="serenity" label="Serenity" default>
@@ -236,13 +256,13 @@ client.post_bot_server_count(bot.server_count()).await.unwrap();
   </TabItem>
 </Tabs>
 
-### Checking if the weekend vote multiplier is active
+#### Checking if the weekend vote multiplier is active
 
 ```rust
 let is_weekend = client.is_weekend().await.unwrap();
 ```
 
-### Generating widget URLs
+#### Generating widget URLs
 
 <Tabs>
   <TabItem value="large" label="Large" default>
