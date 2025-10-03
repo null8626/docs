@@ -1,56 +1,240 @@
 ---
-title: JavaScript
-description: Official Top.gg JavaScript library
+title: Node.js
+description: Top.gg Node.js library
+toc_max_heading_level: 4
 ---
 
-## Links
-[Documentation](https://topgg.js.org)
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-[NPM Package](https://npmjs.com/package/@top-gg/sdk)
+# Node.js SDK
 
-[GitHub](https://github.com/top-gg/node-sdk)
+> For more information, see the documentation here: https://topgg.js.org.
+
+The community-maintained Node.js library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/node-sdk).
 
 ## Installation
 
-`npm install @top-gg/sdk` or `yarn add @top-gg/sdk`
+<Tabs>
+  <TabItem value="npm" label="NPM" default>
+    ```sh
+    $ npm i @top-gg/sdk
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="Yarn">
+    ```sh
+    $ yarn add @top-gg/sdk
+    ```
+  </TabItem>
+</Tabs>
 
-If you're using deno, check out the [unofficial deno sdk](https://github.com/link-discord/topgg-deno)
+## Setting up
 
-## Posting bot stats
+<Tabs>
+  <TabItem value="v1" label="v1" default>
+    ```js
+    import Topgg from "@top-gg/sdk";
+    
+    const client = new Topgg.V1Api(process.env.TOPGG_TOKEN);
+    ```
+  </TabItem>
+  <TabItem value="v0" label="v0">
+    ```js
+    import Topgg from "@top-gg/sdk";
+    
+    const client = new Topgg.Api(process.env.TOPGG_TOKEN);
+    ```
+  </TabItem>
+</Tabs>
 
-Posting your bot's statistics is a quick and easy way to show how many people use your bot. There's a simple library that uses our SDK to post statistics here: [topgg-autoposter](https://npmjs.com/package/topgg-autoposter)
+## Usage
 
-`npm i topgg-autoposter`
+### API v1
 
-```js:title=/index.js
-const client = new Discord.Client() // Your discord.js or eris client (or djs ShardingManager)
-const { AutoPoster } = require('topgg-autoposter')
+#### Getting your project's vote information of a user
 
-const ap = AutoPoster('Your Top.gg Token', client)
+<Tabs>
+  <TabItem value="discord" label="Discord ID" default>
+    ```js
+    const vote = await client.getVote("661200758510977084");
+    ```
+  </TabItem>
+  <TabItem value="topgg" label="Top.gg ID">
+    ```js
+    const vote = await client.getVote("8226924471638491136", "topgg");
+    ```
+  </TabItem>
+</Tabs>
 
-ap.on('posted', () => {
-  console.log('Posted stats to Top.gg!')
-})
+#### Posting your bot's application commands list
+
+<Tabs>
+  <TabItem value="discordjs" label="Discord.js" default>
+    ```js
+    const commands = (await bot.application.commands.fetch()).map(cmd => cmd.toJSON());
+
+    await client.postBotCommands(commands);
+    ```
+  </TabItem>
+  <TabItem value="eris" label="Eris">
+    ```js
+    const commands = await bot.getCommands();
+
+    await client.postBotCommands(commands);
+    ```
+  </TabItem>
+  <TabItem value="discordeno" label="Discordeno">
+    ```js
+    import { getApplicationCommands } from "discordeno";
+
+    const commands = await getApplicationCommands(bot);
+
+    await client.postBotCommands(commands);
+    ```
+  </TabItem>
+  <TabItem value="harmony" label="Harmony">
+    ```js
+    const commands = await bot.interactions.commands.all();
+
+    await client.postBotCommands(commands);
+    ```
+  </TabItem>
+  <TabItem value="oceanic" label="Oceanic">
+    ```js
+    const commands = await bot.application.getGlobalCommands();
+
+    await client.postBotCommands(commands);
+    ```
+  </TabItem>
+</Tabs>
+
+### API v0
+
+#### Getting a bot
+
+```js
+const bot = await client.getBot("461521980492087297");
 ```
 
-## Webhooks
+#### Getting several bots
 
-The API can also be configured to receive events for when users vote for your bot through webhooks via express. You must first configure webhooks on your bot through the dashboard before using this.
+```js
+const bots = await client.getBots();
+```
 
-```js:title=/index.js
-const Topgg = require("@top-gg/sdk")
-const express = require("express")
+#### Getting your project's voters
 
-const app = express()
+<Tabs>
+  <TabItem value="first_page" label="First page" default>
+    ```js
+    const voters = await client.getVoters();
+    ```
+  </TabItem>
+  <TabItem value="subsequent_pages" label="Subsequent pages">
+    ```js
+    const voters = await client.getVoters(2);
+    ```
+  </TabItem>
+</Tabs>
 
-const webhook = new Topgg.Webhook("your webhook auth")
+#### Check if a user has voted for your project
 
-app.post("/dblwebhook", webhook.listener(vote => {
-  // vote will be your vote object, e.g
-  console.log(vote.user) // 395526710101278721 < user who voted\
+```js
+const hasVoted = await client.hasVoted("661200758510977084");
+```
 
-  // You can also throw an error to the listener callback in order to resend the webhook after a few seconds
-}))
+#### Getting your bot's statistics
 
-app.listen(80)
+```js
+const stats = await client.getStats();
+```
+
+#### Posting your bot's statistics
+
+```js
+
+await api.postStats({
+  serverCount: bot.getServerCount(),
+});
+```
+
+#### Automatically posting your bot's statistics every few minutes
+
+You would need to use the third-party `topgg-autoposter` package to be able to autopost. Install it in your terminal like so:
+
+<Tabs>
+  <TabItem value="npm" label="NPM" default>
+    ```sh
+    $ npm i topgg-autoposter
+    ```
+  </TabItem>
+  <TabItem value="yarn" label="Yarn">
+    ```sh
+    $ yarn add topgg-autoposter
+    ```
+  </TabItem>
+</Tabs>
+
+Then in your code:
+
+```js
+import { AutoPoster } from "topgg-autoposter";
+
+// Your discord.js client or any other
+const client = Discord.Client();
+
+AutoPoster(process.env.TOPGG_TOKEN, client).on("posted", () => {
+  console.log("Successfully posted statistics to Top.gg!");
+});
+```
+
+#### Checking if the weekend vote multiplier is active
+
+```js
+const isWeekend = await client.isWeekend();
+```
+
+#### Generating widget URLs
+
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```js
+    const widgetUrl = Topgg.Widget.large(Topgg.WidgetType.DiscordBot, "574652751745777665");
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```js
+    const widgetUrl = Topgg.Widget.votes(Topgg.WidgetType.DiscordBot, "574652751745777665");
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```js
+    const widgetUrl = Topgg.Widget.owner(Topgg.WidgetType.DiscordBot, "574652751745777665");
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```js
+    const widgetUrl = Topgg.Widget.social(Topgg.WidgetType.DiscordBot, "574652751745777665");
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+With express:
+
+```js
+import { Webhook } from "@top-gg/sdk";
+import express from "express";
+
+const app = express();
+const webhook = new Webhook(process.env.TOPGG_WEBHOOK_PASSWORD);
+
+app.post("/votes", webhook.listener(vote => {
+  console.log(`A user with the ID of ${vote.user} has voted us on Top.gg!`);
+}));
+
+app.listen(8080);
 ```

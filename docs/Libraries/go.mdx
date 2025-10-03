@@ -3,12 +3,207 @@ title: Go
 description: Top.gg Go library
 ---
 
-# Go Library
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-The community-maintained Go Library for Top.gg. If you experience any issues/bugs please submit an issue on Github.
+# Go SDK
 
-- [GitHub Link](https://github.com/top-gg/go-sdk)
+> For more information, see the `godoc` here: https://godoc.org/github.com/top-gg/go-dbl.
+
+The community-maintained Go library for Top.gg. If you experience any issues, please submit an issue on [its GitHub repository](https://github.com/Top-gg-Community/go-sdk).
+
+## Installation
+
+```sh
+$ go get -u github.com/top-gg/go-dbl
+```
+
+## Setting up
+
+<Tabs>
+  <TabItem value="defaults" label="With defaults" default>
+    ```go
+    client, err := dbl.NewClient(os.Getenv("TOPGG_TOKEN"))
+    
+    if err != nil {
+      log.Fatalf("Error creating new Top.gg client: %s", err)
+    }
+    ```
+  </TabItem>
+  <TabItem value="explicit_options" label="With explicit options">
+    ```go
+    clientTimeout := 5 * time.Second
+    httpClient := &http.Client{}
+    
+    client, err := dbl.NewClient(
+      os.Getenv("TOPGG_TOKEN"),
+      dbl.HTTPClientOption(httpClient),
+      dbl.TimeoutOption(clientTimeout),
+    )
+    
+    if err != nil {
+      log.Fatalf("Error creating new Top.gg client: %s", err)
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 ## Usage
 
-Please refer to the github docs
+### Getting a bot
+
+```go
+bot, err := client.GetBot("264811613708746752")
+
+if err != nil {
+  log.Fatalf("Unable to get a bot: %s", err)
+}
+```
+
+### Getting several bots
+
+```go
+bots, err := client.GetBots(&dbl.GetBotsPayload{
+  Limit:  50,
+  Offset: 0,
+  Sort:   "id",
+})
+
+if err != nil {
+  log.Fatalf("Unable to get several bots: %s", err)
+}
+```
+
+### Getting your project's voters
+
+<Tabs>
+  <TabItem value="first_page" label="First page" default>
+    ```go
+    firstPageVoters, err := client.GetVotes(1)
+    
+    if err != nil {
+      log.Fatalf("Unable to get voters: %s", err)
+    }
+    ```
+  </TabItem>
+  <TabItem value="subsequent_pages" label="Subsequent pages">
+    ```go
+    secondPageVoters, err := client.GetVotes(2)
+    
+    if err != nil {
+      log.Fatalf("Unable to get voters: %s", err)
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Check if a user has voted for your project
+
+```go
+has_voted, err := client.HasUserVoted("", "661200758510977084")
+
+if err != nil {
+  log.Fatalf("Unable to check if a user has voted: %s", err)
+}
+```
+
+### Getting your bot's statistics
+
+```go
+stats, err := client.GetBotStats("")
+
+if err != nil {
+  log.Fatalf("Unable to get statistics: %s", err)
+}
+```
+
+### Posting your bot's statistics
+
+```go
+err := client.PostBotStats("", &dbl.BotStatsPayload{
+  ServerCount: 2,
+})
+
+if err != nil {
+  log.Fatalf("Unable to post statistics: %s", err)
+}
+```
+
+### Automatically posting your bot's statistics every few minutes
+
+```go
+// Posts once every 30 minutes
+autoposter, err := client.StartAutoposter(1800000, func() int {
+  return bot.GetServerCount()
+})
+
+if err != nil {
+  log.Fatalf("Unable to start autoposter: %s", err)
+}
+
+go func() {
+  for {
+    post_err := <-autoposter.Posted
+
+    if post_err != nil {
+      log.Fatalf("Unable to post statistics: %s", post_err)
+    }
+  }
+}()
+
+// ...
+
+autoposter.Stop() // Optional
+```
+
+### Checking if the weekend vote multiplier is active
+
+```go
+multiplierActive, err := client.IsMultiplierActive()
+
+if err != nil {
+  log.Fatalf("Unable to check weekend vote multiplier: %s", err)
+}
+```
+
+### Generating widget URLs
+
+<Tabs>
+  <TabItem value="large" label="Large" default>
+    ```go
+    widgetUrl := dbl.LargeWidget(dbl.DiscordBotWidget, "574652751745777665")
+    ```
+  </TabItem>
+  <TabItem value="votes" label="Votes">
+    ```go
+    widgetUrl := dbl.VotesWidget(dbl.DiscordBotWidget, "574652751745777665")
+    ```
+  </TabItem>
+  <TabItem value="owner" label="Owner">
+    ```go
+    widgetUrl := dbl.OwnerWidget(dbl.DiscordBotWidget, "574652751745777665")
+    ```
+  </TabItem>
+  <TabItem value="social" label="Social">
+    ```go
+    widgetUrl := dbl.SocialWidget(dbl.DiscordBotWidget, "574652751745777665")
+    ```
+  </TabItem>
+</Tabs>
+
+### Webhooks
+
+#### Being notified whenever someone voted for your project
+
+```go
+listener := dbl.NewListener(os.Getenv("TOPGG_WEBHOOK_PASSWORD"), func(p *dbl.WebhookPayload) {
+  fmt.Printf("A user with the ID of %s has voted us on Top.gg!", p.User)
+})
+
+// Serve is a blocking call
+err := listener.Serve(":8080")
+
+if !errors.Is(err, http.ErrServerClosed) {
+  log.Fatalf("HTTP server error: %s", err)
+}
+```
